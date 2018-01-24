@@ -33,5 +33,3 @@ x = [zeros(n-m,1); tableau(1:m,end)];
 basic = 1;
 feasible = all(x(1:n) >=0);
 optimal = all(tableau(end,1:(n-m)) >= 0);
-
-
