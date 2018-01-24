@@ -13,7 +13,7 @@ function [tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
 %   optimal     - 1 if x is an optimal solution
 %   feasible    - 1 if x is a feasible solution
 % to the LP-problem in canonical form
-% max z = c’*x
+% max z = câ€™*x
 % subject to A*x=b, x>=0
 
 m = size(A, 1);
