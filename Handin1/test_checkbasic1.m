@@ -1,5 +1,4 @@
-
-% Script for testing the tableau.
+% Script for testing the tableau on exercise problems
 A = [1 1 1 0 0;1 0 0 1 0;8 20 0 0 1];
 b = [1;3/4;10];
 c = [2;1;0;0;0];
