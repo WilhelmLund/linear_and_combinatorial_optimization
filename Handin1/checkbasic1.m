@@ -23,12 +23,18 @@ nonbasic = setdiff(1:size(A,2), basicvars);
 
 Ab = A(:,basicvars);
 An = A(:,nonbasic);
+%Ab = A(:,n-m+1:end);
+%An = A(:,1:n-m);
+
 
 cb = c(basicvars);
 cn = c(nonbasic);
+%cb = c(n-m+1:end);
+%cn = c(1:n-m);
 
 tableau = [inv(Ab)*An eye(m) inv(Ab)*b; cb'*inv(Ab)*An-cn' zeros(1,m) cb'*inv(Ab)*b];
-        
+%tableau = tableau(:,[nonbasic basicvars]);
+
 x = [zeros(n-m,1); tableau(1:m,end)];
 basic = 1;
 feasible = all(x(1:n) >=0);
