@@ -37,44 +37,35 @@ tableau
 
 %
 %4
-%%{
+%{
 A=[1 2 2 1 1 0 1 0 0; 1 2 1 1 2 1 0 1 0;3 6 2 1 3 0 0 0 1];
 b=[12;18;24];
 c=[0; 0; 0; 0; 0; 0; -1; -1; -1];
 
-basicvars=[7 8 9];
-[tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
+m = size(A,1);
+n = size(A,2);
 
-while(~optimal)
-    %%{
-    obj_row = tableau(end, 1:size(A,2));
-    ent_var = find(obj_row == min(obj_row));
-    ent_var = ent_var(1);
-    
-    ratios = tableau(1:end-1, end) ./ tableau(1:end-1, ent_var);
-    dep_var = basicvars(ratios == min(ratios));
-    dep_var = dep_var(1);
-    basicvars = [basicvars(basicvars ~= dep_var) ent_var];
-    
-    %}
-    disp(tableau)
-    A = tableau(1:end-1,1:end-1);
-    b = tableau(1:end-1,end);
-    c = -tableau(end,1:end-1)';
-    
-    [tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
-end
-%}
+basicvars=[7 8 9];
+
+[tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
+[tableau,x,optimal,basicvars] = simplex(tableau, basicvars);
+
 % Change to the original problem
-%{
+
 A=[1 2 2 1 1 0; 1 2 1 1 2 1 ;3 6 2 1 3 0 ];
 c=[1;-2;-3;-1;-1;2];
 
-while(~optimal)
-    obj_row = tableau(end, 1:size(A,2));
-    ent_var = obj_row == min(obj_row);
-    basicvars=[7 8 9];
-    [tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
-    tableau
+tableau = tableau(:,[1:6 10]);
+tableau(end,:) = [-c' 0];
+
+obj_row = tableau(end,:);
+for row = 1:length(basicvars)
+    col = basicvars(row);
+    
+    k = -obj_row(end,col);
+    obj_row = obj_row + k*tableau(row,:);
 end
+tableau(end,:) = obj_row;
+[tableau,x,optimal,basicvars] = simplex(tableau, basicvars);
 %}
+

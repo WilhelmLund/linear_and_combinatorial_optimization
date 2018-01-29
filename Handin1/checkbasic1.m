@@ -1,4 +1,4 @@
-function [tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars);
+function [tableau,x,basic,feasible,optimal]=checkbasic1(A,b,c,basicvars)
 % [x,basic,optimal,feasible]=checkbasic1(A,b,c,basicvars),
 % INPUT:    A - mxn matrix
 %           b - mx1 matrix
@@ -25,7 +25,6 @@ Ab = A(:,basicvars);
 An = A(:,nonbasic);
 %Ab = A(:,n-m+1:end);
 %An = A(:,1:n-m);
-
 
 cb = c(basicvars);
 cn = c(nonbasic);
