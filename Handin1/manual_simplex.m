@@ -8,6 +8,7 @@ pcol = ent;
         
 pivotal_column = tableau(1:end-1,pcol);    
 if(~any(pivotal_column >= 0))
+    frpintf('no optimum');
     return;
 end
 tableau(prow, :) = tableau(prow, :) / tableau(prow, pcol);
