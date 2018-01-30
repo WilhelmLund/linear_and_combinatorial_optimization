@@ -24,6 +24,9 @@ dep_index = basicvars == dep;
 basicvars(dep_index) = ent;
 optimal = all(tableau(end,:) >= 0);
 
+fprintf('tableau \n');
+disp(tableau);
+fprintf('optimal \n');
+disp(optimal);
 
-x = zeros(size(tableau,2)-1,1);
 x(basicvars) = tableau(1:end-1,end);
