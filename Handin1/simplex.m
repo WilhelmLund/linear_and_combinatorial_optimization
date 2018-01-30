@@ -17,6 +17,7 @@ while(~optimal)
     
     pivotal_column = tableau(1:end-1,pcol);
     if(~any(pivotal_column >= 0))
+        fprintf('no optimum');
         break
     end
     tableau(prow, :) = tableau(prow, :) / tableau(prow, pcol);
