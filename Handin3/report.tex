@@ -1,0 +1,144 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage[numbered]{matlab-prettifier}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\graphicspath{{./figures/}}
+\lstMakeShortInline[style=Matlab-editor]"
+
+\title{Handin 3}
+\author{Magnus Wallgren tfy13mwa\\ Wilhelm Lundström fte13wlu}
+
+\begin{document}
+\maketitle
+\section*{Exercise 1}
+The problem can be formulated as the following optimization problem
+
+
+\begin{align}
+&\text{minimize}\quad z = \sum_{i,j} c_{ij} x_{ij}\\
+&\text{subject to} 
+\begin{cases}
+\sum_j x_{ij} \leq s_i  &\text{for all } i,\\
+\sum_i x_{ij} \geq d_j &\text{for all } j,\\
+x_{ij} \geq 0, &\text{integers},\\
+x_{12} = 0, 
+\end{cases}
+\end{align}
+where
+$$\mathbf{c} = 
+\left(
+\begin{array}{cccc}
+11 & \infty & 8 & c_{14}\\
+7 & 5 & 6 & 12\\
+7 & 6 & 8 & 5
+\end{array}
+\right), \quad
+\quad \mathbf{s} = 
+\left(
+\begin{array}{c}
+100\\120\\60
+\end{array}
+\right),\quad \mathbf{d} = 
+\left( 
+\begin{array}{c}
+50\\40\\90\\70
+\end{array}
+\right).
+$$
+$c_{14}$ is a non-linear term that depends on $x_{14}$. To be able to solve this as a transportation problem we need supply to be equal to demand and we need to deal with the non-linear term. We add a column representing delivery from a supplier to itself in the cost matrix as a column of 0s to balance supply and demand. Furthermore we divide the the problem into two cases, $x_{14} \leq 20$ and $x_{14} > 20$, by splitting supplier 1 into two suppliers. For the latter case we add another supplier that  only supplies location 4 and has total supply 20. The new system is
+
+\begin{align}
+&\text{minimize}\quad z = \sum_{i,j} c_{ij} x_{ij}\\
+&\text{subject to} 
+\begin{cases}
+\sum_j x_{ij} \leq s_i  &\text{for all } i,\\
+\sum_i x_{ij} \geq d_j &\text{for all } j,\\
+x_{ij} \geq 0, &\text{integers},
+\end{cases}
+\end{align}
+where
+$$\mathbf{c} = 
+\left(
+\begin{array}{ccccc}
+11 & \infty & 8 & 8 & 0\\
+7 & 5 & 6 & 12 & 0\\
+7 & 6 & 8 & 5 & 0\\
+\end{array}
+\right), \quad
+\quad \mathbf{s} = 
+\left(
+\begin{array}{c}
+100\\120\\60
+\end{array}
+\right),\quad \mathbf{d} = 
+\left( 
+\begin{array}{c}
+50\\40\\90\\70\\30
+\end{array}
+\right),
+$$
+or
+$$\mathbf{c} = 
+\left(
+\begin{array}{ccccc}
+11 & \infty & 8 & 8 & 0\\
+7 & 5 & 6 & 12 & 0\\
+7 & 6 & 8 & 5 & 0\\
+\infty & \infty & \infty & 5 & \infty
+\end{array}
+\right), \quad
+\quad \mathbf{s} = 
+\left(
+\begin{array}{c}
+100\\120\\60\\20
+\end{array}
+\right),\quad \mathbf{d} = 
+\left( 
+\begin{array}{c}
+50\\40\\90\\70\\30
+\end{array}
+\right).
+$$
+
+We solve both of these problems using the Matlab routine "transport.m" from computer exercise 2. We use $\infty=10^5$ to not get numerical problems. The optimal solution is the best of the optimal solutions of the two systems. For the second system we add the transportation from supplier 4 to supplier 1 in the optimal solution.\\ 
+
+Without discount we get optimum cost 1590 for
+$$\mathbf{x} = 
+\left(
+\begin{array}{ccccc}
+0 & 0 & 60 & 10 & 30\\
+50 & 40 & 30 & 0 & 0\\
+0 & 0 & 0 & 60 & 0
+\end{array}
+\right).
+$$
+With discount we get optimum cost 1510 for 
+$$\mathbf{x} = 
+\left(
+\begin{array}{ccccc}
+0 & 0 & 0 & 70 & 30\\
+0 & 30 & 90 & 0 & 0\\
+50 & 10 & 0 & 0 & 0
+\end{array}
+\right).
+$$
+The last columns should be ignored as they are supply from the supplier to itself. The optimum with discount is the true optimum and we can see that it uses the discount and no supply is sent from supplier 1 to location 2. Thus, it is an optimal feasible solution.
+\end{document}
